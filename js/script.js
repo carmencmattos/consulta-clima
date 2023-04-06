@@ -17,81 +17,76 @@ const weatherContainer = document.querySelector("#weather-data");
 const errorMessageContainer = document.querySelector("#error-message");
 const loader = document.querySelector("#loader");
 
-
 //loader
 const toggleLoader = () => {
-    loader.classList.toggle("hide");
+  loader.classList.toggle("hide");
 };
 
 //Funções
-const getWeatherData = async(city) => {
-    toggleLoader();
+const getWeatherData = async (city) => {
+  toggleLoader();
 
-    const apiWeatherURL =`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`;
+  const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`;
 
-    const res = await fetch(apiWeatherURL);
-    const data = await res.json();
+  const res = await fetch(apiWeatherURL);
+  const data = await res.json();
 
-    toggleLoader();
+  toggleLoader();
 
-    return data;
-
+  return data;
 };
 
 //Tratamento de erros
 const showErrorMessage = () => {
-    errorMessageContainer.classList.remove("hide");
+  errorMessageContainer.classList.remove("hide");
 };
 
 const hideInformation = () => {
-    errorMessageContainer.classList.add("hide");
-    weatherContainer.classList.add("hide");
+  errorMessageContainer.classList.add("hide");
+  weatherContainer.classList.add("hide");
 };
 
 const showWeatherData = async (city) => {
-    hideInformation();
+  hideInformation();
 
-    const data = await getWeatherData(city);
+  const data = await getWeatherData(city);
 
-    if (data.cod === "404") {
-        showErrorMessage();
-        return;
-    }
+  if (data.cod === "404") {
+    showErrorMessage();
+    return;
+  }
 
-    cityElement.innerText = data.name;
-    tempElement.innerText = parseInt(data.main.temp);
-    descElement.innerText = data.weather[0].description;
-    weatherIconElement.setAttribute("src", `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`
-    );
-    humidityElement.innerText = `${data.main.humidity}%`;
-    windElement.innerText = `${data.wind.speed}km/h`;
+  cityElement.innerText = data.name;
+  tempElement.innerText = parseInt(data.main.temp);
+  descElement.innerText = data.weather[0].description;
+  weatherIconElement.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`
+  );
+  humidityElement.innerText = `${data.main.humidity}%`;
+  windElement.innerText = `${data.wind.speed}km/h`;
 
-    //Alterando a imagem do background
-    document.body.style.backgroundImage = `url("${apiUnsplash + city}")`;
+  //Alterando a imagem do background
+  document.body.style.backgroundImage = `url("${apiUnsplash + city}")`;
+  document.body.style.backgroundSize = `100% 100%`;
+  document.body.style.backgroundRepeat = `no-repeat`;
 
-    weatherContainer.classList.remove("hide");
-
+  weatherContainer.classList.remove("hide");
 };
 
 //Eventos
 searchBtn.addEventListener("click", (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const city = cityInput.value;
+  const city = cityInput.value;
 
-    showWeatherData(city);
-
+  showWeatherData(city);
 });
 
 cityInput.addEventListener("keyup", (e) => {
-    if(e.code === "Enter") {
-        const city = e.target.value;
+  if (e.code === "Enter") {
+    const city = e.target.value;
 
-        showWeatherData(city);
-    }
-
-})
-
-
-
-    
+    showWeatherData(city);
+  }
+});
